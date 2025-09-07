@@ -1,6 +1,0 @@
-rootProject.name = 'printscript-tck'
-includeBuild('../PrintScript-Tools') {
-    dependencySubstitution {
-        substitute module('com.printscript:parser') using project(':parser')
-    }
-}//inidca que parser es parte del build
