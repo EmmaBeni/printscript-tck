@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 repositories {
@@ -10,8 +11,8 @@ repositories {
 
 dependencies {
       // Ahora es proyecto local
-    implementation project(':common')     // Si lo necesitas
     testImplementation 'junit:junit:4.13.1'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
 }
 
 publishing {
