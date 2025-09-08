@@ -1,4 +1,5 @@
 plugins {
+    id 'buildlogic.kotlin-myPlugin-conventions'
     id 'java'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm'
@@ -12,7 +13,7 @@ repositories {
 dependencies {
       // Ahora es proyecto local
     testImplementation 'junit:junit:4.13.1'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.0'
 }
 
 publishing {
