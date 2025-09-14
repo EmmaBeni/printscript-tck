@@ -1,16 +1,31 @@
 plugins {
-    id 'buildlogic.kotlin-myPlugin-conventions'
     id 'java'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm'
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
+    maven{
+        url = 'https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-Tools'
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
 }
 
 dependencies {
+
+    //las que traigo de tools
+    implementation 'IngsisTp:interpreter:1.1.20250913213355'
+    implementation 'IngsisTp:lexer:1.1.20250913213355'
+    implementation 'IngsisTp:linter:1.1.20250913213355'
+    implementation 'IngsisTp:parser:1.1.20250913213355'
+    implementation 'IngsisTp:reskey:1.1.20250913213355'
+    implementation 'IngsisTp:token:1.1.20250913213355'
+    implementation 'IngsisTp:tokendata:1.1.20250913213355'
+
       // Ahora es proyecto local
     testImplementation 'junit:junit:4.13.1'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.0'
