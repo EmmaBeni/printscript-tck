@@ -1,0 +1,43 @@
+name: TCK CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      # Exportar secretos para acceder a GitHub Packages
+      - name: Set GitHub Packages credentials
+        run: |
+          echo "GITHUB_USER=${{ secrets.MY_USER }}" >> $GITHUB_ENV
+          echo "GITHUB_TOKEN=${{ secrets.MY_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: ./gradlew test
+
+      - name: Build
+        run: ./gradlew build
+
+      # Opcional: Publicar el TCK también como paquete
+      - name: Publish TCK to GitHub Packages
+        if: github.ref == 'refs/heads/main'
+        run: ./gradlew publish

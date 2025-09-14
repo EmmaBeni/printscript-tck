@@ -3,30 +3,50 @@ plugins {
     id 'maven-publish'
 }
 
+// Generar versión con timestamp
+def timestamp = new Date().format("yyyyMMddHHmmss")
+version = "1.0.${timestamp}"
+
+// Cargo las variables automáticamente desde el .env (local)
+def dotenvFile = file("$rootDir/.env")
+def dotenvProps = new Properties()
+if (dotenvFile.exists()) {
+    dotenvFile.withReader { reader ->
+        reader.eachLine { line ->
+            line = line.trim()
+            if (!line.startsWith("#") && line.contains("=")) {
+                def (key, value) = line.split("=", 2)
+                dotenvProps.setProperty(key.trim(), value.trim())
+            }
+        }
+    }
+}
+
 repositories {
     mavenLocal()
     mavenCentral()
-    maven{
+    maven {
+        name = 'GitHubPackages'
         url = 'https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-Tools'
         credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            // Primero intenta leer del entorno (CI/CD), si no existe usa el .env local
+            username = System.getenv("GITHUB_USER") ?: dotenvProps.getProperty("GITHUB_USER") ?: ""
+            password = System.getenv("GITHUB_TOKEN") ?: dotenvProps.getProperty("GITHUB_TOKEN") ?: ""
         }
     }
 }
 
 dependencies {
+    // Las dependencias de tools - ACTUALIZA ESTA VERSION con la última publicada
+    implementation 'IngsisTP:interpreter:1.1.20250914031012'
+    implementation 'IngsisTP:lexer:1.1.20250914031012'
+    implementation 'IngsisTP:linter:1.1.20250914031012'
+    implementation 'IngsisTP:parser:1.1.20250914031012'
+    implementation 'IngsisTP:reskey:1.1.20250914031012'
+    implementation 'IngsisTP:token:1.1.20250914031012'
+    implementation 'IngsisTP:tokendata:1.1.20250914031012'
 
-    //las que traigo de tools
-    implementation 'IngsisTp:interpreter:1.1.20250913213355'
-    implementation 'IngsisTp:lexer:1.1.20250913213355'
-    implementation 'IngsisTp:linter:1.1.20250913213355'
-    implementation 'IngsisTp:parser:1.1.20250913213355'
-    implementation 'IngsisTp:reskey:1.1.20250913213355'
-    implementation 'IngsisTp:token:1.1.20250913213355'
-    implementation 'IngsisTp:tokendata:1.1.20250913213355'
-
-      // Ahora es proyecto local
+    // Test dependencies
     testImplementation 'junit:junit:4.13.1'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.0'
 }
@@ -37,7 +57,17 @@ publishing {
             from components.java
             groupId = 'com.printscript'
             artifactId = 'printscript-tck'
-            version = '1.0.0'
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = 'https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-TCK' // O el repo que corresponda
+            credentials {
+                username = System.getenv("GITHUB_USER") ?: dotenvProps.getProperty("GITHUB_USER") ?: ""
+                password = System.getenv("GITHUB_TOKEN") ?: dotenvProps.getProperty("GITHUB_TOKEN") ?: ""
+            }
         }
     }
 }
