@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'application'
 }
 
 // Generar versión con timestamp
@@ -29,7 +30,6 @@ repositories {
         name = 'GitHubPackages'
         url = 'https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-Tools'
         credentials {
-            // Primero intenta leer del entorno (CI/CD), si no existe usa el .env local
             username = System.getenv("GITHUB_USER") ?: dotenvProps.getProperty("GITHUB_USER") ?: ""
             password = System.getenv("GITHUB_TOKEN") ?: dotenvProps.getProperty("GITHUB_TOKEN") ?: ""
         }
@@ -37,18 +37,32 @@ repositories {
 }
 
 dependencies {
-    // Las dependencias de tools - ACTUALIZA ESTA VERSION con la última publicada
-    implementation 'IngsisTP:interpreter:1.1.20250914031012'
-    implementation 'IngsisTP:lexer:1.1.20250914031012'
-    implementation 'IngsisTP:linter:1.1.20250914031012'
-    implementation 'IngsisTP:parser:1.1.20250914031012'
-    implementation 'IngsisTP:reskey:1.1.20250914031012'
-    implementation 'IngsisTP:token:1.1.20250914031012'
-    implementation 'IngsisTP:tokendata:1.1.20250914031012'
+    // Dependencias actualizadas con la última versión
+    implementation 'IngsisTP:interpreter:1.1.202509160331296'
+    implementation 'IngsisTP:lexer:1.1.202509160331296'
+    implementation 'IngsisTP:linter:1.1.202509160331296'
+    implementation 'IngsisTP:parser:1.1.202509160331296'
+    implementation 'IngsisTP:formatter:1.1.202509160331296'
+    implementation 'IngsisTP:ast:1.1.202509160331296'
+    implementation 'IngsisTP:token:1.1.202509160331296'
+    implementation 'IngsisTP:tokendata:1.1.202509160331296'
+    implementation 'IngsisTP:container:1.1.202509160331296'
+    implementation 'IngsisTP:executor:1.1.202509160331296'
+    implementation 'IngsisTP:inputprovider:1.1.202509160331296'
+
+    // Módulos opcionales que pueden ser útiles
+    implementation 'IngsisTP:analyzer:1.1.202509160331296'
+    implementation 'IngsisTP:formatteraction:1.1.202509160331296'
+    implementation 'IngsisTP:progress:1.1.202509160331296'
 
     // Test dependencies
     testImplementation 'junit:junit:4.13.1'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.0'
+}
+
+// Para ejecutar el explorador de clases
+application {
+    mainClass = 'implementation.ClassExplorer'
 }
 
 publishing {
@@ -63,7 +77,7 @@ publishing {
     repositories {
         maven {
             name = 'GitHubPackages'
-            url = 'https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-TCK' // O el repo que corresponda
+            url = 'https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-TCK'
             credentials {
                 username = System.getenv("GITHUB_USER") ?: dotenvProps.getProperty("GITHUB_USER") ?: ""
                 password = System.getenv("GITHUB_TOKEN") ?: dotenvProps.getProperty("GITHUB_TOKEN") ?: ""
