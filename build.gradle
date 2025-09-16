@@ -59,16 +59,83 @@ dependencies {
     implementation 'IngsisTP:formatteraction:1.1.20250916033129'
     implementation 'IngsisTP:progress:1.1.20250916033129'
 
-    // Test
-    testImplementation 'junit:junit:4.13.1'
+    // Test dependencies
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+
+    // Agregar dependencias de test del TCK si existen
+    testImplementation fileTree(dir: 'lib', include: '*.jar')
 
     // Kotlin (por si hace falta interoperabilidad)
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.0'
 }
 
-// --- Ejecutable ---
-application {
+// --- Configuración de Java ---
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+// --- Configuración de tests mejorada ---
+test {
+    // Usar JUnit 4
+    useJUnit()
+
+    // Variables de entorno
+    environment "BEST_FOOTBALL_CLUB", "San Lorenzo"
+
+    // Configuración de logging para tests
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        exceptionFormat "full"
+        showStandardStreams = true
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
+
+    // Aumentar memoria para tests
+    jvmArgs '-Xmx1g'
+
+    // Agregar el directorio de tests si existe
+    if (file('src/test/java').exists()) {
+        include '**/*Test.class'
+        include '**/*Tests.class'
+    }
+
+    // Reporte de tests
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+
+    // Continuar ejecutando tests aunque fallen algunos
+    ignoreFailures = false
+
+    // Configurar classpath de tests
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+// --- Tasks personalizadas ---
+task testAdapter(type: JavaExec) {
+    group = 'verification'
+    description = 'Ejecuta tests del adapter manualmente'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'implementation.TestRunner'
+}
+
+task exploreClasses(type: JavaExec) {
+    group = 'help'
+    description = 'Explora las clases disponibles'
+    classpath = sourceSets.main.runtimeClasspath
     mainClass = 'implementation.ClassExplorer'
+}
+
+// --- Ejecutable principal ---
+application {
+    mainClass = 'implementation.TestRunner'
 }
 
 // --- Publicación a GitHub Packages ---
@@ -93,15 +160,19 @@ publishing {
     }
 }
 
-// --- Configuración de Java ---
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+// --- Configuración adicional para debugging ---
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-parameters'
+    options.encoding = 'UTF-8'
 }
 
-// --- Configuración de tests ---
-test {
-    environment "BEST_FOOTBALL_CLUB", "San Lorenzo"
-    useJUnit()
+// --- Task para limpiar y verificar dependencias ---
+task verifyDependencies {
+    group = 'verification'
+    description = 'Verifica que todas las dependencias estén disponibles'
+    doLast {
+        configurations.runtimeClasspath.files.each { file ->
+            println "Dependency: ${file.name}"
+        }
+    }
 }
