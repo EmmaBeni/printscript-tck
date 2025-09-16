@@ -4,11 +4,12 @@ plugins {
     id 'application'
 }
 
-// Generar versión con timestamp
+// Versión con timestamp
 def timestamp = new Date().format("yyyyMMddHHmmss")
 version = "1.0.${timestamp}"
+group = "com.printscript"
 
-// Cargo las variables automáticamente desde el .env (local)
+// --- Cargar .env si existe ---
 def dotenvFile = file("$rootDir/.env")
 def dotenvProps = new Properties()
 if (dotenvFile.exists()) {
@@ -23,12 +24,13 @@ if (dotenvFile.exists()) {
     }
 }
 
+// --- Repositorios ---
 repositories {
     mavenLocal()
     mavenCentral()
     maven {
         name = 'GitHubPackages'
-        url = 'https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-Tools'
+        url = uri("https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-Tools")
         credentials {
             username = System.getenv("GITHUB_USER") ?: dotenvProps.getProperty("GITHUB_USER") ?: ""
             password = System.getenv("GITHUB_TOKEN") ?: dotenvProps.getProperty("GITHUB_TOKEN") ?: ""
@@ -36,48 +38,52 @@ repositories {
     }
 }
 
+// --- Dependencias ---
 dependencies {
-    // Dependencias actualizadas con la última versión
-    implementation 'IngsisTP:interpreter:1.1.202509160331296'
-    implementation 'IngsisTP:lexer:1.1.202509160331296'
-    implementation 'IngsisTP:linter:1.1.202509160331296'
-    implementation 'IngsisTP:parser:1.1.202509160331296'
-    implementation 'IngsisTP:formatter:1.1.202509160331296'
-    implementation 'IngsisTP:ast:1.1.202509160331296'
-    implementation 'IngsisTP:token:1.1.202509160331296'
-    implementation 'IngsisTP:tokendata:1.1.202509160331296'
-    implementation 'IngsisTP:container:1.1.202509160331296'
-    implementation 'IngsisTP:executor:1.1.202509160331296'
-    implementation 'IngsisTP:inputprovider:1.1.202509160331296'
+    // Core PrintScript modules desde GitHub Packages
+    implementation 'IngsisTP:interpreter:1.1.20250916033129'
+    implementation 'IngsisTP:lexer:1.1.20250916033129'
+    implementation 'IngsisTP:linter:1.1.20250916033129'
+    implementation 'IngsisTP:parser:1.1.20250916033129'
+    implementation 'IngsisTP:formatter:1.1.20250916033129'
+    implementation 'IngsisTP:ast:1.1.20250916033129'
+    implementation 'IngsisTP:token:1.1.20250916033129'
+    implementation 'IngsisTP:tokendata:1.1.20250916033129'
+    implementation 'IngsisTP:container:1.1.20250916033129'
+    implementation 'IngsisTP:executor:1.1.20250916033129'
+    implementation 'IngsisTP:inputprovider:1.1.20250916033129'
 
-    // Módulos opcionales que pueden ser útiles
-    implementation 'IngsisTP:analyzer:1.1.202509160331296'
-    implementation 'IngsisTP:formatteraction:1.1.202509160331296'
-    implementation 'IngsisTP:progress:1.1.202509160331296'
+    // Opcionales
+    implementation 'IngsisTP:analyzer:1.1.20250916033129'
+    implementation 'IngsisTP:formatteraction:1.1.20250916033129'
+    implementation 'IngsisTP:progress:1.1.20250916033129'
 
-    // Test dependencies
+    // Test
     testImplementation 'junit:junit:4.13.1'
+
+    // Kotlin (por si hace falta interoperabilidad)
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.0'
 }
 
-// Para ejecutar el explorador de clases
+// --- Ejecutable ---
 application {
     mainClass = 'implementation.ClassExplorer'
 }
 
+// --- Publicación a GitHub Packages ---
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
             groupId = 'com.printscript'
             artifactId = 'printscript-tck'
+            version = project.version
         }
     }
-
     repositories {
         maven {
             name = 'GitHubPackages'
-            url = 'https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-TCK'
+            url = uri("https://maven.pkg.github.com/Grupo-14-INGSIS/PrintScript-TCK")
             credentials {
                 username = System.getenv("GITHUB_USER") ?: dotenvProps.getProperty("GITHUB_USER") ?: ""
                 password = System.getenv("GITHUB_TOKEN") ?: dotenvProps.getProperty("GITHUB_TOKEN") ?: ""
@@ -86,12 +92,14 @@ publishing {
     }
 }
 
+// --- Configuración de Java ---
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
+// --- Configuración de tests ---
 test {
     environment "BEST_FOOTBALL_CLUB", "San Lorenzo"
     useJUnit()

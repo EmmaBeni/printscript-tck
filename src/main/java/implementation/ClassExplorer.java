@@ -7,48 +7,49 @@ public class ClassExplorer {
   public static void main(String[] args) {
     String[] possibleClasses = {
       // Módulos principales disponibles
-      "interpreter.Interpreter",
-      "lexer.Lexer",
-      "linter.Linter",
-      "parser.Parser",
-      "formatter.Formatter",
-      "executor.Executor",
+      "interpreter.src.main.kotlin.Interpreter",
+      "lexer.src.main.kotlin.Lexer",
+      "linter.src.main.kotlin.Linter",
+      "parser.src.main.kotlin.Parser",
+      "formatter.src.main.kotlin.Formatter",
+      "executor.src.main.kotlin.Executor",
 
       // Clases de datos
-      "ast.ASTNode",
-      "ast.AST",
-      "token.Token",
-      "tokendata.TokenData",
-      "container.Container",
-      "inputprovider.InputProvider",
-      "analyzer.Analyzer",
-      "formatteraction.FormatterAction",
-      "progress.Progress",
+      "ast.src.main.kotlin.ASTNode",
+      "ast.src.main.kotlin.AST",
+      "token.src.main.kotlin.Token",
+      "tokendata.src.main.kotlin.TokenData",
+      "container.src.main.kotlin.Container",
+      "inputprovider.src.main.kotlin.InputProvider",
+      "analyzer.src.main.kotlin.Analyzer",
+      "formatteraction.src.main.kotlin.FormatterAction",
+      "progress.src.main.kotlin.Progress",
 
       // Versiones con sufijo Kt (objetos Kotlin)
-      "interpreter.InterpreterKt",
-      "lexer.LexerKt",
-      "linter.LinterKt",
-      "parser.ParserKt",
-      "formatter.FormatterKt",
-      "executor.ExecutorKt",
+      "interpreter.src.main.kotlin.InterpreterKt",
+      "lexer.src.main.kotlin.LexerKt",
+      "linter.src.main.kotlin.LinterKt",
+      "parser.src.main.kotlin.ParserKt",
+      "formatter.src.main.kotlin.FormatterKt",
+      "executor.src.main.kotlin.ExecutorKt",
 
       // Posibles clases principales por módulo
-      "interpreter.PrintScriptInterpreter",
-      "linter.PrintScriptLinter",
-      "formatter.PrintScriptFormatter",
+      "interpreter.src.main.kotlin.PrintScriptInterpreter",
+      "linter.src.main.kotlin.PrintScriptLinter",
+      "formatter.src.main.kotlin.PrintScriptFormatter",
 
       // Posibles implementaciones específicas
-      "interpreter.InterpreterImpl",
-      "linter.LinterImpl",
-      "formatter.FormatterImpl",
-      "parser.ParserImpl",
+      "interpreter.src.main.kotlin.InterpreterImpl",
+      "linter.src.main.kotlin.LinterImpl",
+      "formatter.src.main.kotlin.FormatterImpl",
+      "parser.src.main.kotlin.ParserImpl",
 
       // Clases factory o builder
-      "interpreter.InterpreterFactory",
-      "linter.LinterFactory",
-      "formatter.FormatterFactory"
+      "interpreter.src.main.kotlin.InterpreterFactory",
+      "linter.src.main.kotlin.LinterFactory",
+      "formatter.src.main.kotlin.FormatterFactory"
     };
+
 
     System.out.println("Explorando clases de IngsisTP (versión 1.1.202509160331296)...\n");
 
