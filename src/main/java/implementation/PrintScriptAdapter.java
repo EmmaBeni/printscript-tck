@@ -132,16 +132,22 @@ public class PrintScriptAdapter implements PrintScriptFactory {
         String sourceCode = readInputStream(src);
 
         // 2. Crear el lexer
+        Class<?> stringCharSourceClass = Class.forName("lexer.src.main.kotlin.StringCharSource");
+        Object charSource = stringCharSourceClass.getDeclaredConstructor(String.class)
+            .newInstance(sourceCode);
+
         Class<?> lexerClass = Class.forName("lexer.src.main.kotlin.Lexer");
-        Object lexer = lexerClass.getDeclaredConstructor(Object.class)
-          .newInstance(sourceCode);
+        Object lexer = lexerClass.getDeclaredConstructor(Class.forName("lexer.src.main.kotlin.CharSource"))
+          .newInstance(charSource);
 
         // 3. Hacer split para obtener tokens
         Method splitMethod = lexerClass.getMethod("split", int.class);
         splitMethod.invoke(lexer, 8192);
 
         // 4. Obtener la lista y crear tokens
-        Object listField = lexerClass.getField("list").get(lexer);
+        Method getListMethod = lexerClass.getMethod("getList");
+        Object listField = getListMethod.invoke(lexer);
+        //Object listField = lexerClass.getField("list").get(lexer);
         Method createTokenMethod = lexerClass.getMethod("createToken", java.util.List.class);
         Object container = createTokenMethod.invoke(lexer, listField);
 
@@ -199,9 +205,14 @@ public class PrintScriptAdapter implements PrintScriptFactory {
         String sourceCode = readInputStream(src);
 
         // 2. Crear el lexer
+        Class<?> stringCharSourceClass = Class.forName("lexer.src.main.kotlin.StringCharSource");
+        Object charSource = stringCharSourceClass.getDeclaredConstructor(String.class)
+            .newInstance(sourceCode);
+
         Class<?> lexerClass = Class.forName("lexer.src.main.kotlin.Lexer");
-        Object lexer = lexerClass.getDeclaredConstructor(Object.class)
-          .newInstance(sourceCode);
+        System.out.println(lexerClass);
+        Object lexer = lexerClass.getDeclaredConstructor(Class.forName("lexer.src.main.kotlin.CharSource"))
+          .newInstance(charSource);
 
         // 3. Hacer split para obtener tokens
         Method splitMethod = lexerClass.getMethod("split", int.class);
@@ -278,7 +289,9 @@ public class PrintScriptAdapter implements PrintScriptFactory {
       Object token = getMethod.invoke(container, i);
       if (token != null) {
         // Obtener el contenido del token
-        Object content = token.getClass().getField("content").get(token);
+        Method getContentMethod = token.getClass().getMethod("getContent");
+        Object content = getContentMethod.invoke(token);
+        //Object content = token.getClass().getField("content").get(token);
         result.append(content.toString());
         if (i < size - 1) {
           result.append(" ");
