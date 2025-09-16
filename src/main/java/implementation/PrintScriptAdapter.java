@@ -40,16 +40,21 @@ public class PrintScriptAdapter implements PrintScriptFactory {
         String sourceCode = readInputStream(src);
 
         // 2. Crear el lexer
+        Class<?> stringCharSourceClass = Class.forName("lexer.src.main.kotlin.StringCharSource");
+        Object charSource = stringCharSourceClass.getDeclaredConstructor(String.class)
+            .newInstance(sourceCode);
+
         Class<?> lexerClass = Class.forName("lexer.src.main.kotlin.Lexer");
-        Object lexer = lexerClass.getDeclaredConstructor(Object.class)
-          .newInstance(sourceCode);
+        Object lexer = lexerClass.getDeclaredConstructor(Class.forName("lexer.src.main.kotlin.CharSource"))
+            .newInstance(charSource);
 
         // 3. Hacer split para obtener tokens
         Method splitMethod = lexerClass.getMethod("split", int.class);
         splitMethod.invoke(lexer, 8192);
 
         // 4. Obtener la lista de strings
-        Object listField = lexerClass.getField("list").get(lexer);
+        Method getListMethod = lexerClass.getMethod("getList");
+        Object listField = getListMethod.invoke(lexer);
 
         // 5. Crear tokens
         Method createTokenMethod = lexerClass.getMethod("createToken", java.util.List.class);
