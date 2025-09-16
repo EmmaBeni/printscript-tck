@@ -8,6 +8,7 @@ public class ClassExplorer {
     String[] possibleClasses = {
       // Módulos principales disponibles
       "interpreter.src.main.kotlin.Interpreter",
+      "cli.src.main.kotlin.Cli",
       "lexer.src.main.kotlin.Lexer",
       "linter.src.main.kotlin.Linter",
       "parser.src.main.kotlin.Parser",
@@ -16,7 +17,6 @@ public class ClassExplorer {
 
       // Clases de datos
       "ast.src.main.kotlin.ASTNode",
-      "ast.src.main.kotlin.AST",
       "token.src.main.kotlin.Token",
       "tokendata.src.main.kotlin.TokenData",
       "container.src.main.kotlin.Container",
@@ -25,29 +25,6 @@ public class ClassExplorer {
       "formatteraction.src.main.kotlin.FormatterAction",
       "progress.src.main.kotlin.Progress",
 
-      // Versiones con sufijo Kt (objetos Kotlin)
-      "interpreter.src.main.kotlin.InterpreterKt",
-      "lexer.src.main.kotlin.LexerKt",
-      "linter.src.main.kotlin.LinterKt",
-      "parser.src.main.kotlin.ParserKt",
-      "formatter.src.main.kotlin.FormatterKt",
-      "executor.src.main.kotlin.ExecutorKt",
-
-      // Posibles clases principales por módulo
-      "interpreter.src.main.kotlin.PrintScriptInterpreter",
-      "linter.src.main.kotlin.PrintScriptLinter",
-      "formatter.src.main.kotlin.PrintScriptFormatter",
-
-      // Posibles implementaciones específicas
-      "interpreter.src.main.kotlin.InterpreterImpl",
-      "linter.src.main.kotlin.LinterImpl",
-      "formatter.src.main.kotlin.FormatterImpl",
-      "parser.src.main.kotlin.ParserImpl",
-
-      // Clases factory o builder
-      "interpreter.src.main.kotlin.InterpreterFactory",
-      "linter.src.main.kotlin.LinterFactory",
-      "formatter.src.main.kotlin.FormatterFactory"
     };
 
 

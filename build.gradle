@@ -52,6 +52,7 @@ dependencies {
     implementation 'IngsisTP:container:1.1.20250916033129'
     implementation 'IngsisTP:executor:1.1.20250916033129'
     implementation 'IngsisTP:inputprovider:1.1.20250916033129'
+    implementation 'IngsisTP:cli:1.1.20250916033129'
 
     // Opcionales
     implementation 'IngsisTP:analyzer:1.1.20250916033129'
